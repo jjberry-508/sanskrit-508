@@ -1,0 +1,16 @@
+# see https://docs.travis-ci.com/user/docker/
+services: docker
+
+before_install:
+  # print docker version
+  - docker -v
+  # Disable services enabled by default
+  # http://docs.travis-ci.com/user/database-setup/#MySQL
+  - sudo /etc/init.d/mysql stop
+  - sudo /etc/init.d/postgresql stop
+install:
+  # Launch services
+  - docker build -f Dockerfile -t "ling-508/sanskrit-508:latest" .
+script:
+  # Run tests
+  - docker run -it "ling-508/sanskrit-508:latest" python -m pytest tests
