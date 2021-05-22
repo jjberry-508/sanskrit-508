@@ -1,5 +1,10 @@
 version: "2"
 services:
+  app:
+    build: .
+    links:
+      - db
+
   db:
     image: mysql:5.7
     ports:
