@@ -14,11 +14,11 @@ install:
   - docker build -f Dockerfile -t "ling-508/sanskrit-508:latest" .
 
 before_script:
-  - docker compose up
+  - docker-compose up
 
 script:
   # Run tests
   - docker run -it "ling-508/sanskrit-508:latest" python -m pytest tests
 
 after_script:
-  - docker compose down
+  - docker-compose down
