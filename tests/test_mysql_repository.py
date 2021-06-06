@@ -1,8 +1,8 @@
 from db.mysql_repository import *
-
+from model.verb_class_1_generator import *
 
 repo = MysqlRepository()
-verb_entry = {'id': 8,
+verb_entry = {'id': 9,
               'form': u'bhṛ',
               'pos': 'verb',
               'definition': 'to bear, carry',
@@ -12,7 +12,7 @@ verb_entry = {'id': 8,
               'noun_gender': None,
               'noun_declension': None,
               'chapter': 4}
-noun_entry = {'id': 80,
+noun_entry = {'id': 123,
               'form': u'ācāra',
               'pos': 'noun',
               'definition': 'conduct, manner',
@@ -57,3 +57,13 @@ def test_mapper():
 def test_load_lexicon():
     lexicon = repo.load_lexicon()
     assert len(lexicon) >= 130
+
+def persist_generated_words():
+    generator = VerbClass1Generator()
+    lex_entry = repo.mapper(verb_entry)
+    words = generator.generate_present_indicative_active(lex_entry)
+    repo.drop_generated_words()
+    repo.create_word_tables()
+    repo.persist_generated_words(words)
+    word_list = repo.select_generated_words()
+    assert len(word_list) == 9

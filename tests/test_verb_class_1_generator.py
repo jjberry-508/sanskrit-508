@@ -2,7 +2,8 @@ from model.verb_class_1_generator import *
 
 
 def test_present_indicative_active_bhr():
-    lex_entry = LexicalEntry(form='bhṛ',
+    lex_entry = LexicalEntry(id=9,
+                             form='bhṛ',
                              pos=PartOfSpeech.FINITE_VERB,
                              definition='to bear, carry',
                              verb_class=VerbClass.I,
@@ -29,7 +30,8 @@ def test_present_indicative_active_bhr():
 
 
 def test_present_indicative_active_budh():
-    lex_entry = LexicalEntry(form='budh',
+    lex_entry = LexicalEntry(id=12,
+                             form='budh',
                              pos=PartOfSpeech.FINITE_VERB,
                              definition='to wake up, understand',
                              verb_class=VerbClass.I,
@@ -57,7 +59,8 @@ def test_present_indicative_active_budh():
 
 def test_switcher():
     switcher = {(PartOfSpeech.FINITE_VERB, VerbClass.I): VerbClass1Generator}
-    lex_entry = LexicalEntry(form='bhṛ',
+    lex_entry = LexicalEntry(id=9,
+                             form='bhṛ',
                              pos=PartOfSpeech.FINITE_VERB,
                              definition='to bear, carry',
                              verb_class=VerbClass.I,

@@ -2,7 +2,8 @@ from model.verb_class_4_generator import *
 
 
 def test_present_indicative_active_hrs():
-    lex_entry = LexicalEntry(form='hṛṣ',
+    lex_entry = LexicalEntry(id=15,
+                             form='hṛṣ',
                              pos=PartOfSpeech.FINITE_VERB,
                              definition='to be excited, happy',
                              verb_class=VerbClass.IV,
@@ -29,7 +30,8 @@ def test_present_indicative_active_hrs():
 
 
 def test_present_indicative_active_drs():
-    lex_entry = LexicalEntry(form='dṛś',
+    lex_entry = LexicalEntry(id=14,
+                             form='dṛś',
                              pos=PartOfSpeech.FINITE_VERB,
                              definition='to see',
                              verb_class=VerbClass.IV,
