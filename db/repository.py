@@ -1,5 +1,6 @@
 import abc
 
+from model.finite_verb import FiniteVerb
 from model.lexical_entry import LexicalEntry
 from model.word import Word
 
@@ -28,4 +29,8 @@ class Repository(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def query_word_form(self, word_form: str) -> list[Word]:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_verb_details(self, word: Word) -> FiniteVerb:
         raise NotImplementedError

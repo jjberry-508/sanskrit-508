@@ -2,7 +2,7 @@ CREATE DATABASE sanskrit;
 ALTER DATABASE sanskrit CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 use sanskrit;
 
-CREATE OR REPLACE TABLE lexicon (
+CREATE TABLE lexicon (
     id INT NOT NULL AUTO_INCREMENT,
     form NVARCHAR(30), /* citation form in the vocab list, sans root symbol for verbs */
     pos VARCHAR(30), /* part of speech */

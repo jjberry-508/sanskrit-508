@@ -22,7 +22,7 @@ class VerbClass1Generator(VerbGenerator):
             if person == Person.FIRST:
                 link_vowel = "ā"
             surface_form = stem + link_vowel + self.get_primary_active_ending(person, number)
-            words.append(FiniteVerb(lex_entry, surface_form, person, number,
+            words.append(FiniteVerb(1, lex_entry, surface_form, person, number,
                                     Tense.PRESENT, Voice.ACTIVE, Mood.INDICATIVE))
         return words
 

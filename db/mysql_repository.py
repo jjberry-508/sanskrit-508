@@ -12,8 +12,8 @@ class MysqlRepository(Repository):
         config = {
             'user': 'root',
             'password': 'root',
-            'host': 'db',  # to run LOCALLY, this should be localhost
-            'port': '3306',  # to run LOCALLY, this should be 32000
+            'host': 'localhost',  # to run LOCALLY, this should be localhost
+            'port': '32000',  # to run LOCALLY, this should be 32000
             'database': 'sanskrit'
         }
         self.connection = mysql.connector.connect(**config)
@@ -175,7 +175,7 @@ class MysqlRepository(Repository):
                     }} for (word_id, surface_form, lexicon_id, form, pos, definition,
                             verb_class, verb_surface, preverb, noun_gender, noun_declension,
                             chapter) in self.cursor]
-        words = [Word(lex_entry=self.mapper(entry.get('lexical_entry')),
+        words = [Word(id=entry.get('id'), lex_entry=self.mapper(entry.get('lexical_entry')),
                       surface_form=entry.get('surface_form')) for entry in entries]
         return words
 
@@ -191,27 +191,15 @@ class MysqlRepository(Repository):
                "  l.preverb AS preverb, "
                "  l.noun_gender AS noun_gender, "
                "  l.noun_declension AS noun_declension, "
-               "  l.chapter AS chapter, "
-               "  fv.person AS person, "
-               "  fv.number AS number, "
-               "  fv.tense AS tense, "
-               "  fv.voice AS voice, "
-               "  fv.mood AS mood "
+               "  l.chapter AS chapter "
                "FROM words w "
                "INNER JOIN lexicon l "
                "ON w.lexicon_id = l.id "
-               "INNER JOIN finite_verbs fv "
-               "ON w.id = fv.word_id "
-               f"WHERE w.form= '{word_form}'"
+               f"WHERE w.form LIKE BINARY '{word_form}'"
                )
         self.cursor.execute(sql)
         entries = [{'id': word_id,
                     'surface_form': surface_form,
-                    'person': Person(person),
-                    'number': Number(number),
-                    'tense': Tense(tense),
-                    'voice': Voice(voice),
-                    'mood': Mood(mood),
                     'lexical_entry': {
                         'id': lexicon_id,
                         'form': form,
@@ -225,12 +213,29 @@ class MysqlRepository(Repository):
                         'chapter': chapter
                     }} for (word_id, surface_form, lexicon_id, form, pos, definition,
                             verb_class, verb_surface, preverb, noun_gender, noun_declension,
-                            chapter, person, number, tense, voice, mood) in self.cursor]
-        words = [FiniteVerb(lex_entry=self.mapper(entry.get('lexical_entry')),
-                            surface_form=entry.get('surface_form'),
-                            person=entry.get('person'),
-                            number=entry.get('number'),
-                            tense=entry.get('tense'),
-                            voice=entry.get('voice'),
-                            mood=entry.get('mood')) for entry in entries]
+                            chapter) in self.cursor]
+        words = [Word(id=entry.get('id'), lex_entry=self.mapper(entry.get('lexical_entry')),
+                      surface_form=entry.get('surface_form')) for entry in entries]
         return words
+
+    def get_verb_details(self, word: Word) -> FiniteVerb:
+        sql = ("SELECT person, number, tense, voice, mood "
+               "FROM finite_verbs "
+               f"WHERE word_id = '{word.id}'"
+               )
+        self.cursor.execute(sql)
+        entries = [{'person': Person(person),
+                    'number': Number(number),
+                    'tense': Tense(tense),
+                    'voice': Voice(voice),
+                    'mood': Mood(mood)
+                    } for (person, number, tense, voice, mood) in self.cursor]
+        word = FiniteVerb(id=word.id,
+                          lex_entry=word.lex_entry,
+                          surface_form=word.surface_form,
+                          person=entries[0].get('person'),
+                          number=entries[0].get('number'),
+                          tense=entries[0].get('tense'),
+                          voice=entries[0].get('voice'),
+                          mood=entries[0].get('mood'))
+        return word
