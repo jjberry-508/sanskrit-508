@@ -1,5 +1,3 @@
-from typing import Union
-
 import db.mysql_repository
 from model.verb_class_1_generator import *
 from model.verb_class_4_generator import *

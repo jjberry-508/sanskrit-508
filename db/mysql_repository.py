@@ -12,8 +12,8 @@ class MysqlRepository(Repository):
         config = {
             'user': 'root',
             'password': 'root',
-            'host': 'localhost',  # to run LOCALLY, this should be localhost
-            'port': '32000',  # to run LOCALLY, this should be 32000
+            'host': 'db',  # to run LOCALLY, this should be localhost
+            'port': '3306',  # to run LOCALLY, this should be 32000
             'database': 'sanskrit'
         }
         self.connection = mysql.connector.connect(**config)
@@ -197,25 +197,28 @@ class MysqlRepository(Repository):
                "ON w.lexicon_id = l.id "
                f"WHERE w.form LIKE BINARY '{word_form}'"
                )
-        self.cursor.execute(sql)
-        entries = [{'id': word_id,
-                    'surface_form': surface_form,
-                    'lexical_entry': {
-                        'id': lexicon_id,
-                        'form': form,
-                        'pos': pos,
-                        'definition': definition,
-                        'verb_class': verb_class,
-                        'verb_surface': verb_surface,
-                        'preverb': preverb,
-                        'noun_gender': noun_gender,
-                        'noun_declension': noun_declension,
-                        'chapter': chapter
-                    }} for (word_id, surface_form, lexicon_id, form, pos, definition,
-                            verb_class, verb_surface, preverb, noun_gender, noun_declension,
-                            chapter) in self.cursor]
-        words = [Word(id=entry.get('id'), lex_entry=self.mapper(entry.get('lexical_entry')),
-                      surface_form=entry.get('surface_form')) for entry in entries]
+        try:
+            self.cursor.execute(sql)
+            entries = [{'id': word_id,
+                        'surface_form': surface_form,
+                        'lexical_entry': {
+                            'id': lexicon_id,
+                            'form': form,
+                            'pos': pos,
+                            'definition': definition,
+                            'verb_class': verb_class,
+                            'verb_surface': verb_surface,
+                            'preverb': preverb,
+                            'noun_gender': noun_gender,
+                            'noun_declension': noun_declension,
+                            'chapter': chapter
+                        }} for (word_id, surface_form, lexicon_id, form, pos, definition,
+                                verb_class, verb_surface, preverb, noun_gender, noun_declension,
+                                chapter) in self.cursor]
+            words = [Word(id=entry.get('id'), lex_entry=self.mapper(entry.get('lexical_entry')),
+                          surface_form=entry.get('surface_form')) for entry in entries]
+        except mysql.connector.errors.ProgrammingError:
+            words = []
         return words
 
     def get_verb_details(self, word: Word) -> FiniteVerb:

@@ -1,3 +1,5 @@
 pytest
 beautifulsoup4
 mysql-connector
+Flask
+httpie
