@@ -3,3 +3,4 @@ beautifulsoup4
 mysql-connector
 Flask
 httpie
+flask-cors

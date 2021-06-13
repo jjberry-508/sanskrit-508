@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sanskrit Bot API</title>
+</head>
+<body>
+<h1>Welcome to the Sanskrit bot API</h1>
+<h2>Methods</h2>
+
+<h3>Parse a word</h3>
+<div>
+<p>Endpoint: http://localhost:5000/parse</p>
+<p>Request type: POST</p>
+<p>Request body: JSON with field "word", e.g. </p>
+<pre>
+  {
+    "word": "bharati"
+  }
+</pre>
+<p>Response: JSON with parse details, e.g. </p>
+<pre>
+  [
+  {
+    "id": 7,
+    "lex_entry": {
+      "chapter": 4,
+      "definition": "to bear, carry",
+      "form": "bhṛ",
+      "noun_declension": null,
+      "noun_gender": null,
+      "pos": "finite_verb",
+      "preverb": null,
+      "verb_class": "I",
+      "verb_surface": "bharati"
+    },
+    "mood": "indicative",
+    "number": "singular",
+    "person": "third",
+    "surface_form": "bharati",
+    "tense": "present",
+    "voice": "active"
+  }
+]
+</pre>
+</div>
+
+<h3>Generate words</h3>
+<div>
+<p>Endpoint: http://localhost:5000/generate</p>
+<p>Request type: GET</p>
+<p>Response: </p>
+<pre>
+  {
+    "msg": "success"
+  }
+</pre>
+</div>
+</body>
+</html>
