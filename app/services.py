@@ -67,7 +67,7 @@ class Services:
         return words
 
     # Use case 3: the app takes a string and returns its constituent parts
-    def segment_compound(self, input_form: str) -> list[list[Union[str, int]]]:
+    def segment_compound(self, input_form: str) -> list[list[str]]:
         tokens = tokenize(input_form)
 
         # Find all substring matches
