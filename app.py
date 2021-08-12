@@ -52,5 +52,16 @@ def parse_word():
     return jsonify(forms)
 
 
+@app.route("/segment", methods=["POST"])
+@cross_origin(origin='localhost', headers=['Content-Type', 'Authorization'])
+def segment_word():
+    data = request.get_json()
+    app.logger.info(f"/segment - Got request: {data}")
+    segments = services.segment_compound(data.get('compound'))
+    app.logger.info(f"/segment - Output: {segments}")
+
+    return jsonify(segments)
+
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0')

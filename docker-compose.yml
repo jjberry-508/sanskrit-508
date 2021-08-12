@@ -1,7 +1,10 @@
-version: "2"
+version: "2.1"
 services:
   app:
     build: .
+    depends_on:
+      db:
+        condition: service_healthy
     links:
       - db
     ports:
@@ -12,6 +15,12 @@ services:
     ports:
       - "32000:3306"
     environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - ./data:/docker-entrypoint-initdb.d/:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
